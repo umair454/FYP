@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMSHub - Operations Expenses Ledger</title>
+    <!-- 🎨 CSS Path Matrix -->
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <!-- 🚀 Font Awesome Icons Framework -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 🚨 WHITE PAGE PROTECTION AUTORUN */
+        body, html {
+            background-color: #0f172a !important;
+            color: #f8fafc !important;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- 🏢 CENTRALIZED SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <div class="sidebar-brand"><h3>HMSHub</h3></div>
+            <nav class="sidebar-menu">
+                <a href="/html/dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="/html/residents.html"><i class="fa-solid fa-users"></i> Residents</a>
+                <a href="/html/billing.html"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+                <a href="/html/expenses.html" class="active"><i class="fa-solid fa-wallet"></i> Expenses</a>
+                <a href="/html/complaints.html"><i class="fa-solid fa-circle-exclamation"></i> Complaints</a>
+                <a href="/html/visitors-log.html"><i class="fa-solid fa-shield-halved"></i> Security Logs</a>
+                <a href="/html/staff.html"><i class="fa-solid fa-user-tie"></i> Staff Management</a>
+                <a href="/html/settings.html"><i class="fa-solid fa-gear"></i> Admin Settings</a>
+                <a href="#" onclick="logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Workspace Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div>
+                    <h1 style="color: white; margin-bottom: 5px;">Society Expenses & Utilities Logs</h1>
+                    <p style="color: #94a3b8; margin: 0;">Track outgoing capital distributions, log structural development payouts, and audit operational cash flows.</p>
+                </div>
+            </header>
+
+            <!-- 🔄 DUAL SPLIT INTERFACE GRID -->
+            <section class="charts-layout-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-top: 30px; align-items: start;">
+                
+                <!-- LEFT PIECE: RECORD NEW EXPENSE TRANSACTION -->
+                <div class="chart-container-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 8px;">
+                    <h3 style="color:#e2e8f0; margin-top: 0; margin-bottom: 15px;"><i class="fa-solid fa-cash-register" style="color:#10b981; margin-right:8px;"></i> Log New Expenditure</h3>
+                    <form id="addExpenseForm" style="display: flex; flex-direction: column; gap: 14px;">
+                        <div class="input-group" style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="color: #94a3b8; font-size: 0.85rem;">Transaction Title</label>
+                            <input type="text" id="expenseTitle" placeholder="e.g., Generator Diesel, Water Tank Repair" required style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none;">
+                        </div>
+                        <div class="input-group" style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="color: #94a3b8; font-size: 0.85rem;">Amount Expended (Rs.)</label>
+                            <input type="number" id="expenseAmount" placeholder="e.g., 4500" required style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none;">
+                        </div>
+                        <div class="input-group" style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="color: #94a3b8; font-size: 0.85rem;">Category Allocation</label>
+                            <select id="expenseCategory" required style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none; cursor: pointer;">
+                                <option value="Utilities" style="background: #0f172a;">Utilities (Electricity/Water)</option>
+                                <option value="Maintenance" style="background: #0f172a;">Maintenance & Repairs</option>
+                                <option value="Salaries" style="background: #0f172a;">Staff Salaries</option>
+                                <option value="Security" style="background: #0f172a;">Security & Safeguard Equipment</option>
+                                <option value="Miscellaneous" style="background: #0f172a;">Miscellaneous Payouts</option>
+                            </select>
+                        </div>
+                        <button type="submit" id="expenseSubmitBtn" style="background: #10b981; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 5px;"><i class="fa-solid fa-wallet"></i> Commit Expenditure</button>
+                    </form>
+                </div>
+
+                <!-- RIGHT PIECE: LIVE STATEMENT STREAM LEDGER -->
+                <div class="table-container" style="margin: 0; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 8px;">
+                    <div class="table-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0; color: white;">Cash Outflow Statements</h3>
+                        <div class="search-box-wrapper" style="position: relative; display: flex; align-items: center;">
+                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; color: #64748b;"></i>
+                            <input type="text" id="expenseSearchInput" onkeyup="filterExpensesTable()" placeholder="Search expenditure title..." style="padding: 8px 12px 8px 35px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none;">
+                        </div>
+                    </div>
+                    <table id="expensesMasterTable" style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid rgba(255,255,255,0.08); color: #94a3b8;">
+                                <th style="padding: 12px 8px;">Expense Description</th>
+                                <th style="padding: 12px 8px;">Category Cluster</th>
+                                <th style="padding: 12px 8px;">Amount Debited</th>
+                                <th style="padding: 12px 8px;">Transaction Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic rows via expenses.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/expenses.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = "/html/login.html"; }
+    </script>
+</body>
+</html>

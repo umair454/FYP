@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMS Hub - Staff Console</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h3>HMS HUB <span>STAFF</span></h3>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="/html/staff-dashboard.html" class="active"><i class="fa-solid fa-screwdrivers-wrench"></i> My Assignments</a>
+                <a href="#" onclick="logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div>
+                    <h1 id="staff-welcome">Welcome Staff Operator</h1>
+                    <p id="staff-meta">Loading roster operational status...</p>
+                </div>
+            </header>
+
+            <section class="data-section" style="margin-top: 20px;">
+                <div class="table-container">
+                    <div class="table-header-flex" style="margin-bottom: 20px;">
+                        <h3>Active Job Orders Grid</h3>
+                    </div>
+                    <div id="tasks-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/js/staff-dashboard.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = "/html/login.html"; }
+    </script>
+</body>
+</html>

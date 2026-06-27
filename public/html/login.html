@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMS Hub - Admin Portal</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="glass-background">
+        <div class="login-container">
+            <div class="login-header">
+                <h2>HMS HUB</h2>
+                <p>Smart Housing Management System</p>
+            </div>
+            
+            <form id="adminLoginForm">
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <label for="portalType" style="display: block; margin-bottom: 8px; font-weight: 600; color: #94a3b8;">Portal Domain</label>
+                    <select id="portalType" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: white; outline: none; cursor: pointer; font-size: 0.95rem;">
+                        <option value="admin" style="background: #1e293b; color: white;">System Administrator / Manager</option>
+                        <option value="resident" style="background: #1e293b; color: white;">Society Verified Resident</option>
+                        <option value="staff" style="background: #1e293b; color: white;">Technical Operations Staff</option>
+                        <option value="guard" style="background: #1e293b; color: white;">Main Gate Security Guard</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter identity access key" required autocomplete="off">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter security password" required>
+                </div>
+                
+                <button type="submit" id="loginBtn">Secure Login</button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="#" onclick="toggleRecoveryModal(true)" style="color: #3b82f6; font-size: 0.85rem; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-key"></i> Forgot Security Key / Password?</a>
+            </div>
+
+            <div class="login-footer">
+                <p>&copy; 2026 HMS Hub Security Engine. All Rights Reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="recoveryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
+        <div class="login-container" style="background: #1e293b; border: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 400px; padding: 30px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);">
+            <div class="login-header" style="margin-bottom: 20px; text-align: center;">
+                <h3 style="color: white; margin: 0 0 5px 0;">Credential Overhaul Console</h3>
+                <p style="color: #64748b; margin: 0; font-size: 0.85rem;">Verify registered security matrix lines.</p>
+            </div>
+
+            <form id="requestOTPForm" style="display: flex; flex-direction: column; gap: 14px;">
+                <div class="input-group">
+                    <label for="recoveryPortal" style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 5px;">Target Sub-Portal</label>
+                    <select id="recoveryPortal" required style="width: 100%; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none; cursor: pointer;">
+                        <option value="resident" style="background: #1e293b;">Resident Portal (Enter Email)</option>
+                        <option value="staff" style="background: #1e293b;">Staff Portal (Enter Mobile Number)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="recoveryUser" style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 5px;">Account Identity User Link</label>
+                    <input type="text" id="recoveryUser" placeholder="Email address or phone entry" required style="width: 100%; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none;">
+                </div>
+                <button type="submit" id="sendOtpBtn" style="width:100%; background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">Generate OTP Handshake</button>
+            </form>
+
+            <form id="commitResetForm" style="display: none; flex-direction: column; gap: 14px; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 15px;">
+                <div class="input-group">
+                    <label for="otpToken" style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 5px;">6-Digit Verification OTP</label>
+                    <input type="text" id="otpToken" placeholder="XXXXXX" required maxlength="6" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none; text-align: center; font-family: monospace; font-size: 1.2rem; letter-spacing: 4px;">
+                </div>
+                <div class="input-group">
+                    <label for="newPassword" style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 5px;">New Credential Password</label>
+                    <input type="password" id="newPassword" placeholder="••••••••" required style="width: 100%; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none;">
+                </div>
+                <button type="submit" id="commitBtn" style="width:100%; background: #10b981; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">Overhaul Security Key</button>
+            </form>
+
+            <button onclick="toggleRecoveryModal(false)" style="width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px; margin-top: 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">Cancel Overhaul</button>
+        </div>
+    </div>
+
+    <script src="../js/login.js"></script>
+</body>
+</html>

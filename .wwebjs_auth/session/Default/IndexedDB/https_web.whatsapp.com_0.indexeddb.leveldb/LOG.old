@@ -1,0 +1,18 @@
+2026/06/27-23:01:01.173 d14 Reusing MANIFEST D:\HMS-HUB\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-004771
+2026/06/27-23:01:01.174 d14 Recovering log #5227
+2026/06/27-23:01:01.196 d14 Reusing old log D:\HMS-HUB\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/005227.log 
+2026/06/27-23:09:10.956 2098 Compacting 1@1 + 1@2 files
+2026/06/27-23:09:11.027 2098 Generated table #5238@1: 44536 keys, 1552653 bytes
+2026/06/27-23:09:11.027 2098 Compacted 1@1 + 1@2 files => 1552653 bytes
+2026/06/27-23:09:11.031 2098 compacted to: files[ 0 0 14 0 0 0 0 ]
+2026/06/27-23:09:11.038 2098 Delete type=2 #4663
+2026/06/27-23:09:11.038 2098 Delete type=2 #5208
+2026/06/27-23:19:08.852 d14 Level-0 table #5240: started
+2026/06/27-23:19:08.913 d14 Level-0 table #5240: 1198610 bytes OK
+2026/06/27-23:19:08.917 d14 Delete type=0 #5227
+2026/06/27-23:21:32.441 2098 Compacting 1@0 + 0@1 files
+2026/06/27-23:21:32.517 2098 Generated table #5241@0: 21371 keys, 575166 bytes
+2026/06/27-23:21:32.522 2098 Generated table #5242@0: 3 keys, 397 bytes
+2026/06/27-23:21:32.522 2098 Compacted 1@0 + 0@1 files => 575563 bytes
+2026/06/27-23:21:32.526 2098 compacted to: files[ 0 2 14 0 0 0 0 ]
+2026/06/27-23:21:32.527 2098 Delete type=2 #5240

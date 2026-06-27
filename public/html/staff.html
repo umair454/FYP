@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMS Hub - Staff Management</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><h3>HMS HUB</h3></div>
+            <nav class="sidebar-menu">
+                <a href="/html/dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="/html/residents.html"><i class="fa-solid fa-users"></i> Residents</a>
+                <a href="/html/billing.html"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+                <a href="/html/expenses.html"><i class="fa-solid fa-wallet"></i> Expenses</a>
+                <a href="/html/complaints.html"><i class="fa-solid fa-circle-exclamation"></i> Complaints</a>
+                <a href="/html/visitors-log.html"><i class="fa-solid fa-shield-halved"></i> Security Logs</a>
+                <a href="/html/staff.html" class="active"><i class="fa-solid fa-user-tie"></i> Staff Management</a>
+                <a href="/html/settings.html"><i class="fa-solid fa-gear"></i> Admin Settings</a>
+                <a href="#" onclick="logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div>
+                    <h1>Society Staff & Technical Operators</h1>
+                    <p>Track current rosters, monitor staff active duty allocation states, and manage designations.</p>
+                </div>
+            </header>
+
+            <section class="data-section">
+                <div class="table-container">
+                    <div class="table-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3>Active Technical Crew Roster</h3>
+                        <div class="search-box-wrapper" style="position: relative; display: flex; align-items: center;">
+                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; color: #64748b;"></i>
+                            <input type="text" id="staffSearchInput" onkeyup="filterStaffTable()" placeholder="Search name or role..." style="padding: 8px 12px 8px 35px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none;">
+                        </div>
+                    </div>
+                    <table id="staffMasterTable">
+                        <thead>
+                            <tr>
+                                <th>Operator Name</th>
+                                <th>Designation / Position</th>
+                                <th>Contact Number</th>
+                                <th>Current Duty Status</th>
+                                <th>System Tracking</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/js/staff.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = "/html/login.html"; }
+    </script>
+</body>
+</html>

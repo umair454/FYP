@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMSHub - Operations Billing Ledger</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .input-group label { display: block; margin-bottom: 6px; color: #94a3b8; font-size: 0.8rem; font-weight: 600; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; background: #1e293b; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none; height: 42px; box-sizing: border-box; }
+        .input-group input:focus, .input-group select:focus { border-color: #10b981; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><h3>HMSHub</h3></div>
+            <nav class="sidebar-menu">
+                <a href="/html/dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="/html/residents.html"><i class="fa-solid fa-users"></i> Residents</a>
+                <a href="/html/billing.html" class="active"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+                <a href="/html/expenses.html"><i class="fa-solid fa-wallet"></i> Expenses</a>
+                <a href="/html/complaints.html"><i class="fa-solid fa-circle-exclamation"></i> Complaints</a>
+                <a href="/html/visitors-log.html"><i class="fa-solid fa-shield-halved"></i> Security Logs</a>
+                <a href="/html/staff.html"><i class="fa-solid fa-user-tie"></i> Staff Management</a>
+                <a href="/html/settings.html"><i class="fa-solid fa-gear"></i> Admin Settings</a>
+                <a href="#" onclick="logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div>
+                    <h1>Society Maintenance Invoices Ledger</h1>
+                    <p>Monitor global property invoice pipelines, search statement logs, and update collection receipts manually.</p>
+                </div>
+            </header>
+
+            <section class="data-section" style="margin-bottom: 25px;">
+                <div class="form-container" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 22px; border-radius: 8px;">
+                    <h3 style="margin-bottom: 15px; color: #e2e8f0; font-size: 1.1rem; font-weight: 600;"><i class="fa-solid fa-receipt" style="color:#10b981; margin-right:6px;"></i> Post Individual Manual Invoice Entry</h3>
+                    
+                    <form id="manualBillingGenerationForm" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: flex-end;">
+                        <div class="input-group">
+                            <label>Target Resident Occupant</label>
+                            <select id="billingResidentSelectId" required></select>
+                        </div>
+                        <div class="input-group">
+                            <label>Billing Cycle Month</label>
+                            <input type="text" id="billingMonthText" placeholder="e.g., July 2026" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Invoice Amount (Rs.)</label>
+                            <input type="number" id="billingAmountNum" value="2500" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Payment Due Date</label>
+                            <input type="date" id="billingDueDate" required>
+                        </div>
+                        <div>
+                            <button type="submit" id="billingSubmitBtn" style="width:100%; background:#10b981; color:white; border:none; padding:12px; border-radius:6px; font-weight:600; cursor:pointer; transition:0.2s; height:42px; display: flex; align-items: center; justify-content: center; gap: 6px;"><i class="fa-solid fa-receipt"></i> Post Invoice</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="data-section">
+                <div class="table-container">
+                    <div class="table-header-flex">
+                        <h3>Invoices Collection Stream</h3>
+                        <div class="search-box-wrapper">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="billingSearchInput" onkeyup="filterBillingTable()" placeholder="Search resident name or house...">
+                        </div>
+                    </div>
+                    <table id="allBillsTable">
+                        <thead>
+                            <tr>
+                                <th>Resident Reference Name</th>
+                                <th>House Allocation</th>
+                                <th>Invoice Amount</th>
+                                <th>Billing Cycle Month</th>
+                                <th>Payment Status Badge</th>
+                                <th>Collection Action Handlers</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/js/billing.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = "/html/login.html"; }
+    </script>
+</body>
+</html>

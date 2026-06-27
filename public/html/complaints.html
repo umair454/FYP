@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMSHub - Complaints Matrix</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><h3>HMSHub</h3></div>
+            <nav class="sidebar-menu">
+                <a href="/html/dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="/html/residents.html"><i class="fa-solid fa-users"></i> Residents</a>
+                <a href="/html/billing.html"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+                <a href="/html/expenses.html"><i class="fa-solid fa-wallet"></i> Expenses</a>
+                <a href="/html/complaints.html" class="active"><i class="fa-solid fa-circle-exclamation"></i> Complaints</a>
+                <a href="/html/visitors-log.html"><i class="fa-solid fa-shield-halved"></i> Security Logs</a>
+                <a href="/html/staff.html"><i class="fa-solid fa-user-tie"></i> Staff Management</a>
+                <a href="/html/settings.html"><i class="fa-solid fa-gear"></i> Admin Settings</a>
+                <a href="#" onclick="logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div>
+                    <h1>Residents Complaints Control</h1>
+                    <p>Review community maintenance tickets and allocate technical staff operations dynamically.</p>
+                </div>
+            </header>
+
+            <section class="data-section">
+                <div class="table-container">
+                    <div class="table-header-flex">
+                        <h3>Active Tickets Board</h3>
+                    </div>
+                    <table id="complaintsTable">
+                        <thead>
+                            <tr>
+                                <th>Resident Name</th>
+                                <th>House Allocation</th>
+                                <th>Issue Category</th>
+                                <th>Detailed Description</th>
+                                <th>Ticket Status</th>
+                                <th>Deploy Available Staff</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/js/complaints.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = "/html/login.html"; }
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMSHub - Security Logs</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Modern Report Filtering & Export Layout UI */
+        .report-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            background: rgba(30, 41, 59, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+        }
+        .filter-select {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .filter-select:focus { border-color: #3b82f6; }
+        .export-group {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        .btn-export-excel {
+            background: rgba(16, 185, 129, 0.15) !important;
+            border: 1px solid #10b981 !important;
+            color: #10b981 !important;
+        }
+        .btn-export-pdf {
+            background: rgba(239, 68, 68, 0.15) !important;
+            border: 1px solid #ef4444 !important;
+            color: #ef4444 !important;
+        }
+        .btn-export-excel:hover, .btn-export-pdf:hover { opacity: 0.8; transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><h3>HMSHub</h3></div>
+            <nav class="sidebar-menu">
+                <a href="/html/dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="/html/residents.html"><i class="fa-solid fa-users"></i> Residents</a>
+                <a href="/html/billing.html"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+                <a href="/html/expenses.html"><i class="fa-solid fa-wallet"></i> Expenses</a>
+                <a href="/html/complaints.html"><i class="fa-solid fa-circle-exclamation"></i> Complaints</a>
+                <a href="/html/visitors-log.html" class="active"><i class="fa-solid fa-shield-halved"></i> Security Logs</a>
+                <a href="/html/staff.html"><i class="fa-solid fa-user-tie"></i> Staff Management</a>
+                <a href="/html/settings.html"><i class="fa-solid fa-gear"></i> Admin Settings</a>
+                <a href="#" onclick="logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div>
+                    <h1>Gatekeeper Security Logs History</h1>
+                    <p>Real-time audit trails of gate entries, check-in, check-out timestamps.</p>
+                </div>
+                <div class="action-triggers">
+                    <a href="/html/add-visitor.html" class="trigger-btn auto-bill" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-user-plus"></i> New Gate Check-In
+                    </a>
+                </div>
+            </header>
+
+            <!-- 🗓️ DYNAMIC REGISTRY FILTER & EXPORT ROW -->
+            <div class="report-filter-bar">
+                <label style="color:#94a3b8; font-size:0.85rem; font-weight:600;"><i class="fa-solid fa-filter"></i> Filter Logs:</label>
+                <select id="filterMonth" class="filter-select" onchange="applyLogDateFilters()">
+                    <option value="ALL">All Months</option>
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                </select>
+
+                <select id="filterYear" class="filter-select" onchange="applyLogDateFilters()">
+                    <option value="ALL">All Years</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                </select>
+
+                <div class="export-group">
+                    <button onclick="triggerLogsExport('excel')" class="trigger-btn btn-export-excel"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+                    <button onclick="triggerLogsExport('pdf')" class="trigger-btn btn-export-pdf"><i class="fa-solid fa-file-pdf"></i> Export PDF</button>
+                </div>
+            </div>
+
+            <section class="data-section">
+                <div class="table-container">
+                    <div class="table-header-flex">
+                        <h3>Visitor Registry Log Matrix</h3>
+                        <div class="search-box-wrapper">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="visitorSearchInput" onkeyup="filterVisitorsTable()" placeholder="Search name or destination...">
+                        </div>
+                    </div>
+                    <table id="visitorsLogTable">
+                        <thead>
+                            <tr>
+                                <th>Visitor/Resident Name</th>
+                                <th>Contact Number</th>
+                                <th>House No</th>
+                                <th>Purpose</th>
+                                <th>Time In (Entry)</th>
+                                <th>Time Out (Exit)</th>
+                                <th>Status Panel</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 📦 Core Reporting Pipelines SheetJS & jsPDF Engine Drivers -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <script src="/js/visitors-log.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = "/html/login.html"; }
+    </script>
+</body>
+</html>

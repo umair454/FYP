@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMSHub - Residents</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Modals Styling */
+        .custom-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-box { background: #1e293b; padding: 25px; border-radius: 8px; width: 90%; max-width: 550px; color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 20px; }
+        .modal-header h3 { margin: 0; color: #3b82f6; font-size: 1.2rem; }
+        .close-btn { background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
+        .close-btn:hover { transform: scale(1.1); }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .input-group { display: flex; flex-direction: column; margin-bottom: 10px; }
+        .input-group label { color: #94a3b8; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; }
+        .input-group input { padding: 10px; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: white; outline: none; }
+        .input-group input:focus { border-color: #3b82f6; }
+        
+        .action-btns button { border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold; margin-right: 5px; transition: 0.2s; }
+        .btn-view { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid #3b82f6; }
+        .btn-edit { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
+        .btn-delete { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid #ef4444; }
+        .action-btns button:hover { opacity: 0.8; }
+        
+        .view-data p { margin: 10px 0; font-size: 0.95rem; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .view-data strong { color: #94a3b8; display: inline-block; width: 140px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><h3>HMSHub</h3></div>
+            <nav class="sidebar-menu">
+                <a href="/html/dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="/html/residents.html" class="active"><i class="fa-solid fa-users"></i> Residents</a>
+                <a href="/html/billing.html"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+                <a href="/html/expenses.html"><i class="fa-solid fa-wallet"></i> Expenses</a>
+                <a href="/html/complaints.html"><i class="fa-solid fa-circle-exclamation"></i> Complaints</a>
+                <a href="/html/visitors-log.html"><i class="fa-solid fa-shield-halved"></i> Security Logs</a>
+                <a href="/html/staff.html"><i class="fa-solid fa-user-tie"></i> Staff Management</a>
+                <a href="/html/settings.html"><i class="fa-solid fa-gear"></i> Admin Settings</a>
+                <a href="#" onclick="logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div>
+                    <h1>Residents Management Grid</h1>
+                    <p>Database registration matrix for community property members.</p>
+                </div>
+                <div class="action-triggers">
+                    <a href="/html/add-resident.html" class="trigger-btn auto-bill" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-user-plus"></i> Add New Resident
+                    </a>
+                </div>
+            </header>
+
+            <section class="data-section">
+                <div class="table-container">
+                    <div class="table-header-flex">
+                        <h3>All Registered Residents</h3>
+                        <div class="search-box-wrapper">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="residentSearchInput" onkeyup="filterResidentsTable()" placeholder="Search resident or house...">
+                        </div>
+                    </div>
+                    <table id="allResidentsTable">
+                        <thead>
+                            <tr>
+                                <th>Resident Name</th>
+                                <th>House No</th>
+                                <th>Phone Number</th>
+                                <th>Email Address</th>
+                                <th>Action Controls</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="viewModal" class="custom-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-id-card"></i> Resident Profile</h3>
+                <button class="close-btn" onclick="closeModal('viewModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="view-data" id="viewResidentContent">
+                </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="custom-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 style="color: #10b981;"><i class="fa-solid fa-user-pen"></i> Update Resident Data</h3>
+                <button class="close-btn" onclick="closeModal('editModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="editResidentForm">
+                <input type="hidden" id="edit_id">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="edit_name" required>
+                    </div>
+                    <div class="input-group">
+                        <label>House Number</label>
+                        <input type="text" id="edit_house" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="edit_phone" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="edit_email" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Emergency Contact</label>
+                        <input type="text" id="edit_emergency">
+                    </div>
+                    <div class="input-group">
+                        <label>Monthly Bill (Rs.)</label>
+                        <input type="number" id="edit_bill" required>
+                    </div>
+                </div>
+                <button type="submit" style="width: 100%; background: #10b981; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 1rem;">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/residents.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = "/html/login.html"; }
+    </script>
+</body>
+</html>

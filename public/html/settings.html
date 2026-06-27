@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMS Hub - Admin Settings</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .header-action-wrapper { display: flex; align-items: center; gap: 20px; }
+        .input-group label { display: block; margin-bottom: 6px; color: #94a3b8; font-size: 0.85rem; font-weight: 600; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; outline: none; box-sizing: border-box; }
+        .input-group input:focus, .input-group select:focus { border-color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><h3>HMSHub</h3></div>
+            <nav class="sidebar-menu">
+                <a href="/html/dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="/html/residents.html"><i class="fa-solid fa-users"></i> Residents</a>
+                <a href="/html/billing.html"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+                <a href="/html/expenses.html"><i class="fa-solid fa-wallet"></i> Expenses</a>
+                <a href="/html/complaints.html"><i class="fa-solid fa-circle-exclamation"></i> Complaints</a>
+                <a href="/html/visitors-log.html"><i class="fa-solid fa-shield-halved"></i> Security Logs</a>
+                <a href="/html/staff.html"><i class="fa-solid fa-user-tie"></i> Staff Management</a>
+                <a href="/html/settings.html" class="active"><i class="fa-solid fa-gear"></i> Admin Settings</a>
+                <a href="#" onclick="logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div>
+                    <h1>Admin Parameters & Security Settings</h1>
+                    <p>Deploy custom administration sub-logins, manage staff roles keys, and control infrastructure grid privileges.</p>
+                </div>
+            </header>
+
+            <section class="data-section" style="margin-bottom: 30px;">
+                <div class="form-container">
+                    <h3 style="margin-bottom: 15px; color: #e2e8f0;"><i class="fa-solid fa-user-lock"></i> Generate Access Login Credentials</h3>
+                    
+                    <form id="roleCreationForm">
+                        <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div class="input-group">
+                                <label for="roleUsername">Authorized Username</label>
+                                <input type="text" id="roleUsername" required placeholder="e.g., umair_accountant">
+                            </div>
+                            <div class="input-group">
+                                <label for="rolePassword">Portal Secure Key (Password)</label>
+                                <input type="password" id="rolePassword" required placeholder="••••••••">
+                            </div>
+                            <div class="input-group">
+                                <label for="rolePhone">Registered Phone (WhatsApp)</label>
+                                <input type="text" id="rolePhone" required placeholder="e.g., 03001234567">
+                            </div>
+                            <div class="input-group">
+                                <label for="roleEmail">Official Email Address</label>
+                                <input type="email" id="roleEmail" required placeholder="e.g., operator@domain.com">
+                            </div>
+                            <div class="input-group">
+                                <label for="roleSelection">System Privileges Access Role</label>
+                                <select id="roleSelection" required>
+                                    <option value="">Assign Privilege Access...</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Accountant">Accountant (Finance Hub)</option>
+                                    <option value="Electrician">Electrician (Technical Operational Team)</option>
+                                    <option value="Plumber">Plumber (Technical Operational Team)</option>
+                                    <option value="Guard">Guard (Main Gate Security)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 15px;">
+                            <button type="submit" id="roleSubmitBtn" class="trigger-btn auto-bill" style="padding: 10px 25px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                <i class="fa-solid fa-paper-plane"></i> Dispatch Activation OTP
+                            </button>
+                        </div>
+                    </form>
+
+                    <form id="verifyRoleOTPForm" style="display: none; flex-direction: column; gap: 14px; margin-top: 20px; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 20px;">
+                        <div class="input-group" style="max-width: 300px; margin: 0 auto; text-align: center;">
+                            <label for="creationOTPToken" style="color: #10b981; font-weight: 700; display: block; margin-bottom: 6px;">Enter 6-Digit Secure OTP</label>
+                            <input type="text" id="creationOTPToken" placeholder="XXXXXX" required maxlength="6" style="text-align: center; font-family: monospace; font-size: 1.3rem; letter-spacing: 6px; padding: 10px; width: 100%;">
+                        </div>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button type="submit" id="confirmCreationBtn" style="background: #10b981; color: white; border: none; padding: 12px 35px; border-radius: 6px; font-weight: 600; cursor: pointer;"><i class="fa-solid fa-circle-check"></i> Verify & Deploy Access Node</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="data-section" style="margin-bottom: 30px;">
+                <div class="table-container">
+                    <div class="table-header-flex">
+                        <h3>Registered Active Control Roles</h3>
+                    </div>
+                    <table id="adminRolesTable">
+                        <thead>
+                            <tr>
+                                <th>Active Profile Username</th>
+                                <th>Assigned Management Role</th>
+                                <th>Account Deployment Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="data-section" style="margin-top: 30px;">
+                <div class="table-container" style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.04); padding: 25px; border-radius: 8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px;">
+                        <h3 style="color:#f1f5f9; margin:0;"><i class="fa-solid fa-id-card" style="color:#3b82f6; margin-right:8px;"></i> Perimeter RFID Access Card Terminal</h3>
+                        <span style="font-size:0.8rem; color:#64748b;">Hardware Handshake Layer 1.0</span>
+                    </div>
+
+                    <form id="adminRfidAssignForm" style="display:grid; grid-template-columns: 1.5fr 1.5fr 1fr; gap:15px; background:rgba(0,0,0,0.1); padding:15px; border-radius:6px; margin-bottom:20px;">
+                        <div class="input-group">
+                            <label style="color:#94a3b8; font-size:0.8rem; font-weight:600; display:block; margin-bottom:6px;">Select Society Occupant Node</label>
+                            <select id="rfidResidentSelectId" required></select>
+                        </div>
+                        <div class="input-group">
+                            <label style="color:#94a3b8; font-size:0.8rem; font-weight:600; display:block; margin-bottom:6px;">Hardware Card Raw UID Token</label>
+                            <input type="text" id="rfidRawInputUid" placeholder="Tap or Type Card UID (e.g., A3B95C12)" required>
+                        </div>
+                        <div style="display:flex; align-items:flex-end;">
+                            <button type="submit" id="rfidAssignBtnSubmit" style="width:100%; background:#3b82f6; color:white; border:none; padding:11px; border-radius:6px; font-weight:600; cursor:pointer; transition:0.2s; height:44px;"><i class="fa-solid fa-link"></i> Link Token Key</button>
+                        </div>
+                    </form>
+
+                    <table id="adminRfidInventoryTable" style="width:100%; border-collapse:collapse; text-align:left;">
+                        <thead>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.08); color:#94a3b8; font-size:0.85rem;">
+                                <th style="padding:12px 8px;">Hardware UID Reference</th>
+                                <th style="padding:12px 8px;">Assigned Resident</th>
+                                <th style="padding:12px 8px;">Gate Perimeter Status</th>
+                                <th style="padding:12px 8px; text-align:right;">Control Directives</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script src="/js/settings.js"></script>
+    <script>
+        function logout() { localStorage.clear(); window.location.href = "/html/login.html"; }
+    </script>
+</body>
+</html>
