@@ -199,6 +199,7 @@ app.post('/test-auto-billing', (req, res) => {
 // Admin & Multi-portal Centralized Login Route
 app.post('/admin-login', (req, res) => {
     const { username, password, portal_type } = req.body; 
+    console.log("Backend received:", username, password, portal_type);
     
     if (portal_type === 'resident') {
         db.query("SELECT id, name, house_no, email, phone_no, 'Resident' AS role FROM residents WHERE email = ? AND password = ?", [username, password], (err, result) => {
@@ -208,7 +209,7 @@ app.post('/admin-login', (req, res) => {
         });
     }
     else {
-        db.query("SELECT id, username, role FROM admins WHERE username = ? AND password = ?", [username, password], (err, result) => {
+        db.query("SELECT id, username, role FROM admins WHERE TRIM(username) = TRIM(?) AND TRIM(password) = TRIM(?)", [username, password], (err, result) => {
             if (err) return res.status(500).json(err);
             if (result.length > 0) {
                 const user = result[0];
