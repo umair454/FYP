@@ -215,13 +215,15 @@ app.post('/admin-login', (req, res) => {
                 const user = result[0];
                 const cleanRole = user.role.trim().toLowerCase();
 
+                // Dynamic Portal Routing
                 if (cleanRole === 'guard') {
                     res.json({ success: true, user: user, portal: 'guard' });
-                } else if (cleanRole === 'manager' || cleanRole === 'superadmin') {
+                } else if (cleanRole === 'manager' || cleanRole === 'superadmin' || cleanRole === 'admin') {
                     res.json({ success: true, user: user, portal: 'admin' });
                 } else if (cleanRole === 'accountant') {
                     res.json({ success: true, user: user, portal: 'accountant' });
                 } else {
+                    // Yeh block ab 'plumber' aur baki sab roles ko 'staff' portal par bhej dega
                     res.json({ success: true, user: user, portal: 'staff' });
                 }
             } else {
