@@ -71,34 +71,34 @@ async function sendEmailNotification(toEmail, subject, htmlContent) {
 // ========================================================
 // 2. WHATSAPP LOGISTICS CORE SETUP (CHROME FIXED PATH)
 // ========================================================
-const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        headless: false,
-        executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    },
-    webVersionCache: {
-        type: 'remote',
-        remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-js/main/dist/wppconnect-wa.js',
-    }
-});
+// const client = new Client({
+//     authStrategy: new LocalAuth(),
+//     puppeteer: {
+//         headless: false,
+//         executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+//         args: ['--no-sandbox', '--disable-setuid-sandbox']
+//     },
+//     webVersionCache: {
+//         type: 'remote',
+//         remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-js/main/dist/wppconnect-wa.js',
+//     }
+// });
 
-let isWhatsAppReady = false; 
+// let isWhatsAppReady = false; 
 
-client.on('qr', (qr) => {
-    console.log('\n==================================================');
-    console.log('⚠️ SCAN THIS QR CODE FOR WHATSAPP WORKFLOW HUB ⚠️');
-    console.log('==================================================\n');
-    qrcode.generate(qr, { small: true });
-});
+// client.on('qr', (qr) => {
+//     console.log('\n==================================================');
+//     console.log('⚠️ SCAN THIS QR CODE FOR WHATSAPP WORKFLOW HUB ⚠️');
+//     console.log('==================================================\n');
+//     qrcode.generate(qr, { small: true });
+// });
 
-client.on('ready', () => {
-    isWhatsAppReady = true;
-    console.log('✅ WhatsApp data interface pipelines active!');
-});
+// client.on('ready', () => {
+//     isWhatsAppReady = true;
+//     console.log('✅ WhatsApp data interface pipelines active!');
+// });
 
-client.initialize().catch(err => console.log("WhatsApp Connection Error:", err));
+// client.initialize().catch(err => console.log("WhatsApp Connection Error:", err));
 
 async function sendWhatsAppMessage(toPhone, message) {
     if (!isWhatsAppReady) {
