@@ -1,4 +1,14 @@
-const express = require('express');
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/your-username/FYP.git
+git push -u origin maingit init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/your-username/FYP.git
+git push -u origin mainconst express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -27,6 +37,10 @@ app.use('/html', express.static(path.join(__dirname, 'public', 'html')));
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
+});
 
 // ========================================================
 // 1. EMAIL ENGINE CONFIGURATION (NODEMAILER)
