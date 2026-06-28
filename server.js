@@ -209,25 +209,40 @@ app.post('/admin-login', (req, res) => {
         });
     }
     else {
-        db.query("SELECT id, username, role FROM admins WHERE TRIM(username) = TRIM(?) AND TRIM(password) = TRIM(?)", [username, password], (err, result) => {
-            if (err) return res.status(500).json(err);
-            if (result.length > 0) {
-                const user = result[0];
-                const cleanRole = user.role.trim().toLowerCase();
+        console.log("LOGIN ATTEMPT - Username:", username, "Password:", password);
 
-                // Dynamic Portal Routing
-                if (cleanRole === 'guard') {
-                    res.json({ success: true, user: user, portal: 'guard' });
-                } else if (cleanRole === 'manager' || cleanRole === 'superadmin' || cleanRole === 'admin') {
-                    res.json({ success: true, user: user, portal: 'admin' });
-                } else if (cleanRole === 'accountant') {
-                    res.json({ success: true, user: user, portal: 'accountant' });
+        db.query("SELECT id, username, role, password FROM admins WHERE username = ?", [username], (err, result) => {
+            if (err) {
+                console.log("DB ERROR:", err);
+                return res.status(500).json(err);
+            }
+
+            console.log("DB RESULT FOUND:", result);
+
+            if (result.length > 0) {
+                // Manual password check
+                if (result[0].password === password) {
+                    const user = result[0];
+                    const cleanRole = user.role.trim().toLowerCase();
+
+                    // Dynamic Portal Routing
+                    if (cleanRole === 'guard') {
+                        res.json({ success: true, user: user, portal: 'guard' });
+                    } else if (cleanRole === 'manager' || cleanRole === 'superadmin' || cleanRole === 'admin') {
+                        res.json({ success: true, user: user, portal: 'admin' });
+                    } else if (cleanRole === 'accountant') {
+                        res.json({ success: true, user: user, portal: 'accountant' });
+                    } else {
+                        // Yeh block ab 'plumber' aur baki sab roles ko 'staff' portal par bhej dega
+                        res.json({ success: true, user: user, portal: 'staff' });
+                    }
                 } else {
-                    // Yeh block ab 'plumber' aur baki sab roles ko 'staff' portal par bhej dega
-                    res.json({ success: true, user: user, portal: 'staff' });
+                    console.log("PASSWORD MISMATCH!");
+                    res.status(401).json({ success: false, message: "Invalid Password" });
                 }
             } else {
-                res.status(401).json({ success: false, message: "Incorrect administration or staff database registry match." });
+                console.log("USER NOT FOUND!");
+                res.status(401).json({ success: false, message: "User not found" });
             }
         });
     }
