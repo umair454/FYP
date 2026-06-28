@@ -114,7 +114,10 @@ const db = mysql.createConnection({
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || 'Umair@86247',
     database: process.env.DB_NAME || 'hms_hub_db',
-    port: process.env.DB_PORT || 3306
+    port: process.env.DB_PORT || 3306,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 db.connect(err => {
