@@ -73,10 +73,10 @@ async function sendEmailNotification(toEmail, subject, htmlContent) {
 // ========================================================
 const client = new Client({
     authStrategy: new LocalAuth(),
-    puppeteer: { 
-        headless: false, // UI screen windows pop up hogi for clean dynamic pairing
-        executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--no-zygote'] 
+    puppeteer: {
+        headless: false,
+        executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
     webVersionCache: {
         type: 'remote',
