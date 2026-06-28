@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = window.location.origin;
 
 if (localStorage.getItem("adminUser") === null) {
     window.location.href = "/html/login.html";

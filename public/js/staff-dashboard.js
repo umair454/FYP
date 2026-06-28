@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = window.location.origin;
 
 // Validate if active session contains valid technical crew operator
 const activeStaff = JSON.parse(localStorage.getItem("staffUser"));

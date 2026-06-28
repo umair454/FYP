@@ -1,4 +1,4 @@
-const CORE_API = "http://localhost:5000";
+const CORE_API = window.location.origin;
 
 // 📋 Load active occupants combo select menu for easy linking
 async function loadResidentsMenuToRfidDropdown() {

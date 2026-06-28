@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = window.location.origin;
 
 // Ensure session state contains verified resident payload
 const activeResident = JSON.parse(localStorage.getItem("residentUser"));

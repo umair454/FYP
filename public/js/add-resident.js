@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = window.location.origin;
 
 // Route tracking gateway authorization protocol security check
 if (localStorage.getItem("adminUser") === null) {
