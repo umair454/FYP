@@ -63,22 +63,24 @@ async function sendEmailNotification(toEmail, subject, htmlContent) {
 // ========================================================
 const client = new Client({
     authStrategy: new LocalAuth(),
+    // WhatsApp ko crash/reload hone se rokne ke liye:
+    webVersionCache: {
+        type: 'local'
+    },
     puppeteer: {
         headless: true,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
+            '--disable-dev-shm-usage', // Memory crash se bachata hai
             '--disable-accelerated-2d-canvas',
             '--no-first-run',
             '--no-zygote',
-            '--single-process',
-            '--disable-gpu'
+            '--disable-gpu',
+            // Ek extra RAM saver:
+            '--disable-software-rasterizer' 
+            // Note: Maine yahan se '--single-process' hata diya hai jo crash kar raha tha
         ]
-    },
-    webVersionCache: {
-        type: 'remote',
-        remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-js/main/dist/wppconnect-wa.js',
     }
 });
 
