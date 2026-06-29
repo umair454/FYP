@@ -109,24 +109,26 @@ async function sendWhatsAppMessage(toPhone, message) {
 // ========================================================
 // 3. LOCAL WORKBENCH DATABASE CONNECTION SETUP
 // ========================================================
-const db = mysql.createConnection({
-    host: process.env.DB_HOST || '127.0.0.1',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'Umair@86247',
-    database: process.env.DB_NAME || 'hms_hub_db',
-    port: process.env.DB_PORT || 3306,
-    ssl: {
-        rejectUnauthorized: false
-    }
+const db = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT || 27670,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    ssl: { rejectUnauthorized: false }
 });
 
-db.connect(err => {
-    if (err) { 
-        console.error('❌ Local Workbench Database Connection Failed!', err.message); 
-        return; 
+db.getConnection((err, connection) => {
+    if (err) {
+        console.error('❌ Local Workbench Database Connection Failed!', err.message);
+        return;
     }
     console.log('Connected safely to Local MySQL Server Engine via Workbench!');
-    
+    connection.release();
+
     db.query("SET SQL_SAFE_UPDATES = 0", (safeErr) => {
         if (!safeErr) console.log("🛡️ Safe Updates Disabled for Local Session.");
     });
